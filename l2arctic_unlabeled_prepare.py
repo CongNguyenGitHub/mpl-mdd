@@ -66,12 +66,16 @@ def make_json(data_folder, split, spks, labeled_data):
     print(f"{split} successfully created!")
 
 def get_data_from_spk(data_folder, spk, labeled_data):
-    wav_dir = os.path.join(data_folder, spk, 'wav')
-    tg_dir = os.path.join(data_folder, spk, 'annotation')
-    text_dir = os.path.join(data_folder, spk, 'transcript')
+    # SỬA LỖI TẠI ĐÂY: Thêm 'spk' vào đường dẫn để khớp với cấu trúc thư mục lồng nhau
+    wav_dir = os.path.join(data_folder, spk, spk, 'wav')
+    tg_dir = os.path.join(data_folder, spk, spk, 'annotation')
+    text_dir = os.path.join(data_folder, spk, spk, 'transcript')
+
     spk_data = defaultdict(dict)
     for wav_file in glob(os.path.join(wav_dir, "*.wav")):
-        if wav_file in labeled_data:
+        # Lấy key chuẩn để so sánh (đường dẫn tuyệt đối)
+        abs_wav_file = os.path.abspath(wav_file)
+        if abs_wav_file in labeled_data:
             continue
 
         basename = os.path.basename(wav_file).split(".")[0]
@@ -82,17 +86,19 @@ def get_data_from_spk(data_folder, spk, labeled_data):
 
 def get_data_from_utt( wav_file, text_file, spk):
     utt_data = {}
-    utt_data[wav_file] = {}
-    utt_data[wav_file]["wav"] = wav_file
+    # Sử dụng đường dẫn tuyệt đối làm key để đảm bảo tính duy nhất và nhất quán
+    abs_wav_file = os.path.abspath(wav_file)
+    utt_data[abs_wav_file] = {}
+    utt_data[abs_wav_file]["wav"] = abs_wav_file
     # Reading the signal (to retrieve duration in seconds)
     signal = read_audio(wav_file)
     duration = len(signal) / SAMPLERATE
-    utt_data[wav_file]["duration"] = duration
-    utt_data[wav_file]["spk_id"] = spk
+    utt_data[abs_wav_file]["duration"] = duration
+    utt_data[abs_wav_file]["spk_id"] = spk
 
     with open(text_file, "r") as reader:
         text = reader.readline()
-    utt_data[wav_file]["wrd"] = text
+    utt_data[abs_wav_file]["wrd"] = text
     return utt_data
 
 
@@ -106,5 +112,3 @@ if __name__ == "__main__":
     metadata_l2arctic="data/metadata_l2arctic",
     test_spks=['TLV', 'NJS', 'TNI', 'TXHC', 'ZHAA', 'YKWK',],
 )
-
-
