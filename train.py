@@ -39,7 +39,7 @@ class ASR(sb.Brain):
             attn_mask = make_attn_mask(wavs, wav_lens)
         else:
             attn_mask = None
-        feats = self.modules.wav2vec2(wavs, attention_mask=attn_mask)
+        feats = self.modules.wav2vec2(wavs)
         x = self.modules.enc(feats)
 
         # output layer for ctc log-probabilities
