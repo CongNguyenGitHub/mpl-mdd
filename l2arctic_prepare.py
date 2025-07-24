@@ -63,9 +63,10 @@ def make_json(data_folder, split, spks):
     print(f"{split} successfully created!")
 
 def get_data_from_spk(data_folder, spk):
-    wav_dir = os.path.join(data_folder, spk, 'wav')
-    tg_dir = os.path.join(data_folder, spk, 'annotation')
-    text_dir = os.path.join(data_folder, spk, 'transcript')
+    # SỬA LỖI TẠI ĐÂY: Thêm một biến `spk` nữa vào đường dẫn để khớp với cấu trúc thư mục lồng nhau
+    wav_dir = os.path.join(data_folder, spk, spk, 'wav')
+    tg_dir = os.path.join(data_folder, spk, spk, 'annotation')
+    text_dir = os.path.join(data_folder, spk, spk, 'transcript')
 
     spk_data = defaultdict(dict)
     for tg_file in glob(os.path.join(tg_dir, "*.TextGrid")):
@@ -215,7 +216,7 @@ def normalize_tier_mark(tier: IntervalTier,
     return tier_out
 
 def normalize_phone(s: str, is_rm_annotation=True, is_phoneme_canonical=True,
-                     keep_artificial_sil=False) -> str:
+                    keep_artificial_sil=False) -> str:
     """Normalize phoneme labels to lower case, stress-free form.
     This will also deal with L2-ARCTIC annotations.
     Args:
@@ -225,9 +226,9 @@ def normalize_phone(s: str, is_rm_annotation=True, is_phoneme_canonical=True,
         is_phoneme_canonical: [optional] If set to true, return canonical phoneme; otherwise
         return perceived phoneme.
         keep_artificial_sil: If true, will keep the artificial sil produced by the way L2ARCTIC was annotated.
-                            If false, will not have the sil
-                            e.g. when false, 'ah, sil, d' canonical: ah, perceived: None
-                                 when true, 'ah, sil, d' canonical: ah, perceived: sil
+                             If false, will not have the sil
+                             e.g. when false, 'ah, sil, d' canonical: ah, perceived: None
+                                  when true, 'ah, sil, d' canonical: ah, perceived: sil
     Returns:
         Normalized phoneme (canonical pronunciation or with annotations).
     """
@@ -287,5 +288,3 @@ if __name__ == "__main__":
     metadata_l2arctic="data/metadata_l2arctic",
     test_spks=['TLV', 'NJS', 'TNI', 'TXHC', 'ZHAA', 'YKWK',]
 )
-
-
