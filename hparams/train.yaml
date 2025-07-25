@@ -10,6 +10,9 @@ train_log: !ref <output_folder>/train_log.txt
 # URL for the wav2vec2 model.
 wav2vec2_hub: "facebook/wav2vec2-base"  # wav2vec2-base, pre-trained only on LS 960h
 
+# Dòng được thêm vào để tải checkpoint
+pretrain_path: null 
+
 # Data files
 data_folder_save: "./data"
 # prepared l2arctic data
