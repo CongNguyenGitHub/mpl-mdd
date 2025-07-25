@@ -673,7 +673,13 @@ if __name__ == "__main__":
         hyperparams_to_save=hparams_file,
         overrides=overrides,
     )
-
+    if hparams.get("pretrain_path"):
+        print(f"Loading pretrained model from: {hparams['pretrain_path']}")
+        pretrainer = Pretrainer(
+            collect_in=hparams["modules"],
+            load_path=hparams["pretrain_path"],
+        )
+        pretrainer.load()
     # Dataset IO prep: creating Dataset objects and proper encodings for phones
     train_data_l, train_data_u, valid_data, test_data, label_encoder = dataio_prep(hparams)
 
