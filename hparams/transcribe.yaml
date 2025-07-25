@@ -26,6 +26,10 @@ freeze_wav2vec: False
 freeze_wav2vec_feature_extractor: True  # freeze the CNN extractor in wav2vec
 wav2vec2_specaug: False
 
+
+# Dòng được thêm vào để tải checkpoint
+pretrain_path: null 
+
 # Outputs
 output_neurons: 42 # TIMIT: 39phs(sil)+blank=40; l2arctic: 40phns(sil)+err+blank=42
 blank_index: 0
